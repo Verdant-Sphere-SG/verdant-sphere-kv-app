@@ -1,14 +1,19 @@
-name: PR WorkFlow
+name: Main Workflow
 
+# trigger
 on:
+  push:
+    branches:
+      - main
+      - dev
   pull_request:
     branches:
       - main
       - dev
 
 jobs:
-  app-tests:
-    name: Build and test Laravel Application
+  build:
+    name: Build Laravel App
     runs-on: ubuntu-latest
     services:
       mysql:
@@ -16,19 +21,12 @@ jobs:
         ports:
           - 3306:3306
         env:
-          MYSQL_ALLOW_EMPTY_PASSWORD: false
-          MYSQL_ROOT_PASSWORD: password
-          MYSQL_USERNAME: root
-          MYSQL_DATABASE: test
+            MYSQL_ALLOW_EMPTY_PASSWORD: false
+            MYSQL_ROOT_PASSWORD: password
+            MYSQL_USERNAME: root
+            MYSQL_DATABASE: test
+
     steps:
-      - name: Check Docker processes
-        run: |
-          docker ps
-
-      - name: Check Network Status
-        run: |
-          netstat -an | grep 3306
-
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
@@ -37,28 +35,26 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install Dependencies
+      - name: Install dependencies
         run: |
           composer install
 
-      - name: Copy .env
+      - name: Create .env
         run: |
-          cp .env.ci .env          
+          cp .env.ci .env
           cp .env.ci .env.testing
-
-      - name: Check env files
-        run: |
-          ls -ltr .env          
-          ls -ltr .env.testing
-
-      - name: Generate key
+      
+      - name: Generate the key
         run: |
           php artisan key:generate
-
+      
       - name: Migrate the Database
         run: |
           php artisan migrate
-
-      - name: Execute unit tests
+      
+      - name: Run Unit Testing
         run: |
           php artisan test
+
+      
+   
