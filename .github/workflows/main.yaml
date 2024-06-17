@@ -1,0 +1,64 @@
+name: PR WorkFlow
+
+on:
+  pull_request:
+    branches:
+      - main
+      - dev
+
+jobs:
+  app-tests:
+    name: Build and test Laravel Application
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:latest
+        ports:
+          - 3306:3306
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: false
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_USERNAME: root
+          MYSQL_DATABASE: test
+    steps:
+      - name: Check Docker processes
+        run: |
+          docker ps
+
+      - name: Check Network Status
+        run: |
+          netstat -an | grep 3306
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Dependencies
+        run: |
+          composer install
+
+      - name: Copy .env
+        run: |
+          cp .env.ci .env          
+          cp .env.ci .env.testing
+
+      - name: Check env files
+        run: |
+          ls -ltr .env          
+          ls -ltr .env.testing
+
+      - name: Generate key
+        run: |
+          php artisan key:generate
+
+      - name: Migrate the Database
+        run: |
+          php artisan migrate
+
+      - name: Execute unit tests
+        run: |
+          php artisan test
