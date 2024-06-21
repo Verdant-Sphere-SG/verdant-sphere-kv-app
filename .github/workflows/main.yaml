@@ -16,11 +16,15 @@ jobs:
   build:
     name: Build
     uses: ./.github/workflows/build.yaml
+    with:
+      version: "8.2"
 
   test:
     name: Test
     needs: [build]
     uses: ./.github/workflows/test.yaml
+    with:
+      version: "8.2"
 
 
    
