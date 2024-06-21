@@ -31,7 +31,7 @@ jobs:
 
       - name: Get Composer Cache Directory
         id: composer-cache
-      - uses: actions/cache@v3
+        uses: actions/cache@v3
         with:
           path: ./vendor
           key: ${{ github.sha }}-composer-${{ hashFiles('**/composer.lock') }}
