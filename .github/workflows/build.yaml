@@ -3,19 +3,23 @@ name: Build Laravel App
 # trigger
 on:
   workflow_call:
+    inputs:
+      version:
+        required: true
+        type: string
 
 jobs:
   build:
     name: Build Laravel App
     runs-on: ubuntu-latest
     steps:
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: "8.2"
-
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Prepare Action
+        uses: ./.github/actions/prepare-action
+        with:
+          version: ${{ inputs.version }}
 
       - name: Install dependencies
         run: |
