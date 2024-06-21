@@ -41,6 +41,7 @@ jobs:
   test:
     name: Testing Laravel App
     runs-on: ubuntu-latest
+    needs: [build]
     services:
       mysql:
         image: mysql:latest
