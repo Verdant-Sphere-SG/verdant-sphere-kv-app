@@ -29,6 +29,15 @@ jobs:
         run: |
           composer install
 
+      - name: Get Composer Cache Directory
+        id: composer-cache
+      - uses: actions/cache@v3
+        with:
+          path: ./vendor
+          key: ${{ github.sha }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ github.sha }}-composer-
+
       - name: Create .env
         run: |
           cp .env.ci .env
@@ -62,7 +71,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Restore the Cache
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: ./vendor
+          key: ${{ github.sha }}-composer-
+
       - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
         run: |
           composer install
 
