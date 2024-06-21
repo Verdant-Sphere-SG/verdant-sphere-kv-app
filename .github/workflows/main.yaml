@@ -1,4 +1,5 @@
 name: Main Workflow
+run-name: ${{github.actor}} pushed changes.
 
 # trigger
 on:
@@ -14,6 +15,31 @@ on:
 jobs:
   build:
     name: Build Laravel App
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          composer install
+
+      - name: Create .env
+        run: |
+          cp .env.ci .env
+          cp .env.ci .env.testing
+      
+      - name: Generate the key
+        run: |
+          php artisan key:generate
+
+  test:
+    name: Testing Laravel App
     runs-on: ubuntu-latest
     services:
       mysql:
@@ -56,5 +82,4 @@ jobs:
         run: |
           php artisan test
 
-      
    
