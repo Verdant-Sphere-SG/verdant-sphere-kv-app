@@ -78,4 +78,4 @@ jobs:
         args: >
             -Dsonar.organization=verdant-sphere-sg
             -Dsonar.projectKey=Verdant-Sphere-SG_verdant-sphere-kv-app
-            -Dsonar.sources=.
+            -Dsonar.sources=../../
