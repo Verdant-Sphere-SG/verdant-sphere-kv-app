@@ -1,0 +1,44 @@
+name: Build Laravel App
+
+# trigger
+on:
+  workflow_call:
+    inputs:
+      version:
+        required: true
+        type: string
+
+jobs:
+  build:
+    name: Build Laravel App
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Prepare Action
+        uses: ./.github/actions/prepare-action
+        with:
+          version: ${{ inputs.version }}
+
+      - name: Install dependencies
+        run: |
+          composer install
+
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        uses: actions/cache@v3
+        with:
+          path: ./vendor
+          key: ${{ github.sha }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ github.sha }}-composer-
+
+      - name: Create .env
+        run: |
+          cp .env.ci .env
+          cp .env.ci .env.testing
+      
+      - name: Generate the key
+        run: |
+          php artisan key:generate
