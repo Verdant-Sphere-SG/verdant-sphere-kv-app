@@ -68,7 +68,7 @@ jobs:
       with:
         # Disabling shallow clone is recommended for improving relevancy of reporting
         fetch-depth: 0
-        token: ${{ secrets.GIT_TOKEN }}
+        #token: ${{ secrets.GIT_TOKEN }}
     - name: SonarCloud Scan
       uses: sonarsource/sonarcloud-github-action@master # Ex: v2.1.0, See the latest version at https://github.com/marketplace/actions/sonarcloud-scan
       env:
