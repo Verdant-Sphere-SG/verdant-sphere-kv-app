@@ -1,5 +1,5 @@
-name: CI Workflow
-run-name: ${{github.actor}} pushed changes.
+name: sonascan
+run-name: Sona Cloud Scanning.
 
 # trigger
 on:
