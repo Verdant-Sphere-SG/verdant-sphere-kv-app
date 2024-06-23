@@ -28,4 +28,4 @@ jobs:
       - name: Upload Trivy scan results to GitHub Security tab
         uses: jsoref/github-codeql-action/upload-sarif@favor-workflow-ref
         with:
-           sarif_file: sarif.output.json
+          sarif_file: 'trivy-results.sarif'
