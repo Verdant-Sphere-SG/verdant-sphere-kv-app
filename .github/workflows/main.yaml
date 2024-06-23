@@ -1,0 +1,30 @@
+name: CI Workflow
+run-name: ${{github.actor}} pushed changes.
+
+# trigger
+on:
+  push:
+    branches:
+      - main
+      - dev
+  pull_request:
+    branches:
+      - main
+      - dev
+
+jobs:
+  build:
+    name: Build
+    uses: ./.github/workflows/build.yaml
+    with:
+      version: "8.2"
+
+  test:
+    name: Test
+    needs: [build]
+    uses: ./.github/workflows/test.yaml
+    with:
+      version: "8.2"
+
+
+   
