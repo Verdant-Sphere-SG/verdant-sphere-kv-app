@@ -4,6 +4,8 @@ run-name: Sona Cloud Scanning.
 # trigger
 on:
   push:
+    branches:
+      - feature1
   workflow_dispatch:
 
 jobs:
@@ -23,4 +25,5 @@ jobs:
         args: >
             -Dsonar.organization=verdant-sphere-sg
             -Dsonar.projectKey=Verdant-Sphere-SG_verdant-sphere-kv-app
+            -Dsonar.sources=.
             -X
