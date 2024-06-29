@@ -4,6 +4,8 @@ run-name: Trivy FS Scanning.
 # trigger
 on:
   push:
+    branches:
+      - feature1
   workflow_dispatch:
 
 permissions:
